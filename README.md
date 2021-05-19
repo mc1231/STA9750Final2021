@@ -64,4 +64,39 @@ ggplot(df , aes(x=Attrition_Flag, fill = Attrition_Flag, show.legend = FALSE)) +
 ```
 
 ### Exploratory Data Analysis
+We used a heat map to explore which numerical attributes show correlation to whether the customer attrited or not. The results will be used to determine which attributes to explore more and which attributes are not so important.
 
+```{r heatmap, fig.width=6, fig.height=4,echo=FALSE}
+explore_df <- df %>%
+  select(Attrition_Flag,Customer_Age,Dependent_count, Months_on_book,	Total_Relationship_Count,	Months_Inactive_12_mon,	Contacts_Count_12_mon,	Credit_Limit,	Total_Revolving_Bal,	Avg_Open_To_Buy,	Total_Amt_Chng_Q4_Q1,	Total_Trans_Amt,	Total_Trans_Ct,	Total_Ct_Chng_Q4_Q1,	Avg_Utilization_Ratio)
+
+cormat <- round(cor(explore_df),2)
+
+melted_cormat <- melt(cormat)
+
+# Get upper triangle of the correlation matrix
+get_upper_tri <- function(cormat){
+  cormat[lower.tri(cormat)]<- NA
+  return(cormat)}
+
+upper_tri <- get_upper_tri(cormat)
+
+
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+ggplot(data = melted_cormat, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+ 
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Correlation") +
+  theme_minimal()+ 
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 9, hjust = 1)) +
+  geom_text(aes(Var2, Var1, label = value), color = "black", size = 2)
+```
+
+The heat map shows that age, dependents, months on book, credit limit, and average open to buy are insignificant since it is between -0.1 and 0.1 correlation to attrition flag. Therefore, we will exclude these columns from our model. 
+
+```{r Drop unrelated columns ,echo=FALSE}
+df <- df %>% 
+  select(-c(Customer_Age, Dependent_count, Credit_Limit, Avg_Open_To_Buy))
+```
