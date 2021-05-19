@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(ggplot2)
+library(reshape2)
 ```
 
 ### STA9750 Final Project
