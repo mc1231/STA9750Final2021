@@ -26,16 +26,17 @@ library(dplyr)
 #import data
 df <- read.csv("BankChurners.csv")
 
-# Remove Client Number and two naive bayes irrelevant columns in dataset
-df <- df %>% 
-  select(-c(CLIENTNUM, 
-            Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_1, Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_2))
-
-
 ```
 
 ### Overview of Dataset
 The data for our analysis comprise of customer profile, demographics, and behavior(usage of services) and it is from kaggle which originates from analytticca. It covers one bank with `r dim(df)[1]` customers, and contains `r ncol(df)` columns of customer information. There is `r sum(is.na(df))` missing values in the dataset. 
+
+```{r Drop columns,include=FALSE}
+# Remove Client Number and two naive bayes irrelevant columns in dataset
+df <- df %>% 
+  select(-c(CLIENTNUM, 
+            Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_1, Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_2))
+```
 
 We decided to drop Client Number column because it is nominal and cannot be measured. The target variable is Attrition Flag which indicates if the customer is still existing or attrited. The predictors can be categorized into two types of attributes which is either demographic or behavioral. The demographic attributes include customer age, gender, dependent, education, marital status, and income. The behavioral attributes include Months on Book, Total Relationship Count, Months Inactive, Contacts Count(12 months), Credit Limit, Total Revolving Balance, Average Open to Buy, Total Amount Change Q4 to Q1, Total Transaction Amount, Total Transaction Count, Total Count Change Q4 - Q1, and Average Utilization Ratio. The attributes will be explored in the Exploratory Data Analysis section. 
 
